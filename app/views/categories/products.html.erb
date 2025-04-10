@@ -1,0 +1,14 @@
+<h1>Products in "<%= @category.name %>"</h1>
+
+<% if @products.any? %>
+  <ul>
+    <% @products.each do |product| %>
+      <li>
+        <%= link_to product.name, product_path(product) %> –
+        <%= number_to_currency(product.price) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No products found in this category.</p>
+<% end %>

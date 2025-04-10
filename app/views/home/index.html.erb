@@ -1,0 +1,6 @@
+<h1>Welcome to StreetStitch 👕</h1>
+<p>Explore our latest collection of new, thrifted, and branded clothes!</p>
+<%= link_to "Start Shopping", products_path, class: "btn btn-primary" %>
+<% if user_signed_in? && current_user.customer? %>
+  <%= link_to "🛒 Go to My Cart", cart_path, class: "btn btn-primary" %>
+<% end %>

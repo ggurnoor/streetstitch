@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  subtotal: 9.99
+  gst: 9.99
+  pst: 9.99
+  hst: 9.99
+  total: 9.99
+  address: MyString
+  province: one
+
+two:
+  user: two
+  subtotal: 9.99
+  gst: 9.99
+  pst: 9.99
+  hst: 9.99
+  total: 9.99
+  address: MyString
+  province: two

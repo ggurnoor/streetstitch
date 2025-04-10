@@ -1,0 +1,29 @@
+<p style="color: green"><%= notice %></p>
+
+<% if @product.image.attached? %>
+  <%= image_tag @product.image, width: "300px", style: "margin-bottom: 15px;" %>
+<% else %>
+  <p><em>No image uploaded for this product.</em></p>
+<% end %>
+
+<h1><%= @product.name %></h1>
+
+<p><strong>Description:</strong> <%= @product.description %></p>
+<p><strong>Price:</strong> <%= number_to_currency(@product.price) %></p>
+<p><strong>Stock:</strong> <%= @product.stock %></p>
+<p><strong>Brand:</strong> <%= @product.brand.name %></p>
+<p><strong>Categories:</strong>
+  <%= @product.categories.map(&:name).join(", ") %>
+</p>
+
+<% if user_signed_in? && current_user.customer? %>
+  <%= form_with url: cart_items_path, method: :post do |form| %>
+    <%= hidden_field_tag :product_id, @product.id %>
+    <%= form.submit "Add to Cart", class: "btn btn-primary" %>
+  <% end %>
+<% end %>
+
+
+<div style="margin-top: 20px;">
+  <%= link_to "← Back to Products", products_path, class: "btn btn-secondary" %>
+</div>

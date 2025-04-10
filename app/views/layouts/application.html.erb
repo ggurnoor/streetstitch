@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "StreetStitch" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body style="margin: 0; font-family: 'Segoe UI', sans-serif; background-color: #f9fafb; color: #333;">
+    <nav style="background-color: #1f2937; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; color: white;">
+      <div>
+        <%= link_to "🏠 StreetStitch", root_path, style: "color: white; font-size: 20px; font-weight: bold; text-decoration: none;" %>
+        <%= link_to "All Products", products_path, style: "color: white; margin-left: 20px;" %>
+        <%= link_to "About", about_path, style: "color: white; margin-left: 20px;" %>
+        <%= link_to "Contact", contact_path, style: "color: white; margin-left: 20px;" %>
+        <% if user_signed_in? && current_user.customer? %>
+          <%= link_to "🛒 Cart", cart_path, style: "color: white; margin-left: 20px;" %>
+        <% end %>
+
+      </div>
+
+      <div>
+        <% if user_signed_in? %>
+          <span style="margin-right: 15px;">Hi, <%= current_user.email %></span>
+          <%= button_to "Logout", destroy_user_session_path,
+              method: :delete,
+              form: { style: "display: inline" },
+              style: "background: none; border: none; color: white; cursor: pointer; padding: 0; font: inherit;" %>
+        <% else %>
+          <%= link_to "Login", new_user_session_path, style: "color: white; margin-right: 15px;" %>
+          <%= link_to "Sign Up", new_user_registration_path, style: "color: white;" %>
+        <% end %>
+      </div>
+    </nav>
+
+    <div style="padding: 20px;">
+      <%= yield %>
+    </div>
+  </body>
+</html>

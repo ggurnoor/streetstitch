@@ -1,0 +1,12 @@
+<h1>Edit <%= @page.title %> Page</h1>
+
+<%= form_with model: @page, url: page_path(@page.slug), method: :patch do |form| %>
+  <div>
+    <%= form.label :content, "Page Content" %><br>
+    <%= form.text_area :content, rows: 15, style: "width: 100%;" %>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <%= form.submit "Save Changes", class: "btn btn-primary" %>
+  </div>
+<% end %>

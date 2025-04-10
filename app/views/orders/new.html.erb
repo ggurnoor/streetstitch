@@ -1,0 +1,29 @@
+<h1>🛒 Checkout</h1>
+
+<%= form_with url: orders_path, method: :post, local: true do |f| %>
+  <h3>Shipping Address</h3>
+
+  <div style="margin-bottom: 15px;">
+    <%= f.label :street, "Street Address" %><br>
+    <%= f.text_field :street, name: "address[street]", class: "form-control", required: true %>
+  </div>
+
+  <div style="margin-bottom: 15px;">
+    <%= f.label :city, "City" %><br>
+    <%= f.text_field :city, name: "address[city]", class: "form-control", required: true %>
+  </div>
+
+  <div style="margin-bottom: 15px;">
+    <%= f.label :postal_code, "Postal Code" %><br>
+    <%= f.text_field :postal_code, name: "address[postal_code]", class: "form-control", required: true %>
+  </div>
+
+  <div style="margin-bottom: 20px;">
+    <%= f.label :province_id, "Province" %><br>
+    <%= select_tag "address[province_id]",
+          options_from_collection_for_select(Province.all, :id, :name, current_user.province_id),
+          class: "form-select", required: true %>
+  </div>
+
+  <%= f.submit "Place Order", class: "btn btn-success" %>
+<% end %>

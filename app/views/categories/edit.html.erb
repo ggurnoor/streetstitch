@@ -1,0 +1,13 @@
+<h1>Edit Category</h1>
+
+<%= form_with model: @category, local: true do |form| %>
+  <div>
+    <%= form.label :name %><br>
+    <%= form.text_field :name %>
+  </div>
+  <div>
+    <%= form.submit "Update", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<%= link_to "← Back", categories_path, class: "btn btn-secondary", style: "margin-top: 10px;" %>

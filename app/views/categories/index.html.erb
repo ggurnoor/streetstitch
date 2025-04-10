@@ -1,0 +1,24 @@
+<h1>Manage Categories</h1>
+
+<%= form_with model: @category, url: categories_path, local: true do |form| %>
+  <div>
+    <%= form.label :name, "New Category Name" %><br>
+    <%= form.text_field :name %>
+  </div>
+  <div>
+    <%= form.submit "Add Category", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<hr>
+
+<h2>All Categories</h2>
+<ul>
+  <% @categories.each do |cat| %>
+    <li>
+      <%= cat.name %> –
+      <%= link_to "Edit", edit_category_path(cat) %> |
+      <%= button_to "Delete", category_path(cat), method: :delete, data: { confirm: "Are you sure?" } %>
+    </li>
+  <% end %>
+</ul>
