@@ -1,13 +1,17 @@
-class CartsController < ApplicationController
-  before_action :authenticate_user!
+require 'ostruct'
 
+class CartsController < ApplicationController
   def show
-    @cart = current_user.cart || current_user.create_cart
-    @cart_items = @cart.cart_items.includes(:product)
+    session[:cart] ||= {}
+
+    @cart_items = session[:cart].map do |product_id, quantity|
+      product = Product.find_by(id: product_id)
+      OpenStruct.new(product: product, quantity: quantity.to_i) if product
+    end.compact
 
     @subtotal = @cart_items.sum { |item| item.product.price * item.quantity }
 
-    if current_user.province
+    if user_signed_in? && current_user.province
       pst = current_user.province.pst || 0
       gst = current_user.province.gst || 0
       hst = current_user.province.hst || 0

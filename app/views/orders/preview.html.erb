@@ -1,0 +1,42 @@
+<h1>🧾 Order Invoice Preview</h1>
+
+<p><strong>Shipping Address:</strong><br>
+  <%= @invoice[:address] %><br>
+  <strong>Province:</strong> <%= @invoice[:province]&.name %>
+</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Line Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @invoice[:items].each do |item| %>
+      <tr>
+        <td><%= item.product.name %></td>
+        <td><%= item.quantity %></td>
+        <td><%= number_to_currency(item.product.price) %></td>
+        <td><%= number_to_currency(item.product.price * item.quantity) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<hr>
+
+<p><strong>Subtotal:</strong> <%= number_to_currency(@invoice[:subtotal]) %></p>
+<p><strong>PST:</strong> <%= number_to_currency(@invoice[:pst]) %></p>
+<p><strong>GST:</strong> <%= number_to_currency(@invoice[:gst]) %></p>
+<p><strong>HST:</strong> <%= number_to_currency(@invoice[:hst]) %></p>
+<p><strong>Total:</strong> <%= number_to_currency(@invoice[:total]) %></p>
+
+<%= form_with url: orders_path, method: :post do %>
+  <%= hidden_field_tag :address, @invoice[:address] %>
+  <%= hidden_field_tag :province_id, @invoice[:province]&.id %>
+  <%= submit_tag "Proceed to Payment", class: "btn btn-success" %>
+<% end %>
+

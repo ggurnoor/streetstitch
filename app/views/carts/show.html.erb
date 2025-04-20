@@ -2,7 +2,7 @@
   <h2>Your cart is empty 🛒</h2>
   <%= link_to "Browse Products", products_path, class: "btn btn-primary" %>
 <% else %>
-  <h1>🧾 Your Invoice</h1>
+  <h1>🛒 Your Cart</h1>
 
   <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
     <thead>
@@ -11,42 +11,36 @@
         <th>Quantity</th>
         <th>Unit Price</th>
         <th>Line Total</th>
-        <th>Actions</th>
+        <% if user_signed_in? %>
+          <th>Actions</th>
+        <% end %>
       </tr>
     </thead>
     <tbody>
       <% @cart_items.each do |item| %>
         <tr>
           <td><%= item.product.name %></td>
-
-          <!-- Quantity form -->
           <td>
-            <%= form_with model: item, url: cart_item_path(item), method: :patch, local: true do |f| %>
-              <%= f.number_field :quantity, min: 1, value: item.quantity, style: "width: 60px;" %>
-              <%= f.submit "Update", class: "btn btn-sm btn-outline-secondary" %>
+            <% if user_signed_in? %>
+              <%= form_with url: cart_item_path(item), method: :patch, local: true do |f| %>
+                <%= f.number_field :quantity, min: 1, value: item.quantity, name: "cart_item[quantity]", style: "width: 60px;" %>
+                <%= f.submit "Update", class: "btn btn-sm btn-outline-secondary" %>
+              <% end %>
+            <% else %>
+              <%= number_field_tag "quantity", item.quantity, min: 1, disabled: true, style: "width: 60px;" %>
             <% end %>
           </td>
-
           <td><%= number_to_currency(item.product.price) %></td>
           <td><%= number_to_currency(item.product.price * item.quantity) %></td>
-
-          <!-- Remove button -->
-          <td>
-            <%= button_to "Remove", cart_item_path(item), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
-          </td>
+          <% if user_signed_in? %>
+            <td>
+              <%= button_to "Remove", cart_item_path(item), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+            </td>
+          <% end %>
         </tr>
       <% end %>
     </tbody>
   </table>
-
-  <p><strong>Subtotal:</strong> <%= number_to_currency(@subtotal) %></p>
-  <p><strong>PST:</strong> <%= number_to_currency(@taxes[:pst]) %></p>
-  <p><strong>GST:</strong> <%= number_to_currency(@taxes[:gst]) %></p>
-  <p><strong>HST:</strong> <%= number_to_currency(@taxes[:hst]) %></p>
-
-  <hr>
-
-  <h3><strong>Total:</strong> <%= number_to_currency(@total) %></h3>
 
   <%= link_to "Proceed to Checkout", checkout_path, class: "btn btn-success" %>
 

@@ -20,8 +20,8 @@ gem 'devise'
 gem 'httparty'
 gem 'kaminari'
 gem 'activeadmin'
-
 gem 'sassc'
+gem 'dotenv-rails'
 
 
 # Use Redis adapter to run Action Cable in production

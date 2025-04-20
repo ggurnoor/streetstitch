@@ -16,12 +16,11 @@
   <%= @product.categories.map(&:name).join(", ") %>
 </p>
 
-<% if user_signed_in? && current_user.customer? %>
-  <%= form_with url: cart_items_path, method: :post do |form| %>
-    <%= hidden_field_tag :product_id, @product.id %>
-    <%= form.submit "Add to Cart", class: "btn btn-primary" %>
-  <% end %>
+<%= form_with url: cart_items_path, method: :post, local: true do |form| %>
+  <%= hidden_field_tag :product_id, @product.id %>
+  <%= form.submit "Add to Cart", class: "btn btn-primary" %>
 <% end %>
+
 
 
 <div style="margin-top: 20px;">

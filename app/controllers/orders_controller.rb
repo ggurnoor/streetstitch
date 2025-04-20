@@ -1,68 +1,84 @@
+require 'ostruct'
+
 class OrdersController < ApplicationController
-  before_action :authenticate_user!
+  skip_before_action :verify_authenticity_token
 
   def new
-    @cart_items = current_user.cart.cart_items.includes(:product)
-
+    @cart_items = session_cart_items
     if @cart_items.empty?
-      redirect_to cart_path, alert: "Cart is empty"
-    else
-      @address = current_user.address || Address.new
+      redirect_to cart_path, alert: "Cart is empty" and return
     end
+
+    @address = Address.new
   end
 
   def create
-    Rails.logger.debug "👉 ORDERS CREATE PARAMS: #{params.inspect}"
-
-    @cart_items = current_user.cart.cart_items.includes(:product)
+    @cart_items = session_cart_items
     return redirect_to cart_path, alert: "Cart is empty" if @cart_items.empty?
 
-    # Save or update address
-    address = current_user.address || current_user.build_address
-    if address.update(address_params)
-      # Tax calculations
-      subtotal = @cart_items.sum { |item| item.product.price * item.quantity }
-      pst = current_user.province&.pst || 0
-      gst = current_user.province&.gst || 0
-      hst = current_user.province&.hst || 0
+    address = user_signed_in? ? (current_user.address || current_user.build_address) : Address.new
+    address.assign_attributes(address_params)
+    address.user = current_user if user_signed_in?
 
-      order = current_user.orders.create!(
+    if address.save
+      province = Province.find_by(id: address.province_id)
+      pst = province&.pst || 0
+      gst = province&.gst || 0
+      hst = province&.hst || 0
+
+      subtotal = @cart_items.sum { |item| item.product.price * item.quantity }
+
+      order_attrs = {
         subtotal: subtotal.round(2),
         pst: (subtotal * pst).round(2),
         gst: (subtotal * gst).round(2),
         hst: (subtotal * hst).round(2),
-        total: (subtotal * (1 + pst + gst + hst)).round(2)
-      )
+        total: (subtotal * (1 + pst + gst + hst)).round(2),
+        address: "#{address.street}, #{address.city}, #{address.postal_code}",
+        province_id: address.province_id
+      }
 
-      # Add order items
+      order = user_signed_in? ? current_user.orders.create!(order_attrs) : Order.create!(order_attrs)
+
       @cart_items.each do |item|
         order.order_items.create!(
           product: item.product,
           quantity: item.quantity,
-          unit_price: item.product.price
+          price: item.product.price
         )
       end
 
-      # Empty cart
-      current_user.cart.cart_items.destroy_all
-
+      session[:cart] = {}
       redirect_to order_path(order), notice: "Order placed successfully!"
     else
-      redirect_to checkout_path, alert: "Please check your address details."
+      flash[:alert] = "Failed to save address: #{address.errors.full_messages.join(', ')}"
+      redirect_to checkout_path
     end
   end
 
   def show
-    @order = current_user.orders.find(params[:id])
+    @order = user_signed_in? ? current_user.orders.find(params[:id]) : Order.find(params[:id])
+  end
+
+  def index
+    if user_signed_in?
+      @orders = current_user.orders.includes(order_items: :product)
+    else
+      redirect_to new_user_session_path, alert: "Please log in to view your orders."
+    end
   end
 
   private
 
+  def session_cart_items
+    session[:cart] ||= {}
+    session[:cart].map do |product_id, quantity|
+      product = Product.find_by(id: product_id)
+      OpenStruct.new(product: product, quantity: quantity.to_i) if product
+    end.compact
+  end
+
   def address_params
-    if params[:address].present?
-      params.require(:address).permit(:street, :city, :postal_code, :province_id)
-    else
-      {}
-    end
+    params.require(:address).permit(:street, :city, :postal_code, :province_id)
   end
 end
