@@ -1,11 +1,11 @@
 <% if @cart_items.empty? %>
-  <h2>Your cart is empty 🛒</h2>
+  <div class="alert alert-warning">Your cart is empty 🛒</div>
   <%= link_to "Browse Products", products_path, class: "btn btn-primary" %>
 <% else %>
-  <h1>🛒 Your Cart</h1>
+  <h1 class="mb-4">🛒 Your Cart</h1>
 
-  <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-    <thead>
+  <table class="table table-bordered">
+    <thead class="table-dark">
       <tr>
         <th>Product</th>
         <th>Quantity</th>
@@ -23,11 +23,13 @@
           <td>
             <% if user_signed_in? %>
               <%= form_with url: cart_item_path(item), method: :patch, local: true do |f| %>
-                <%= f.number_field :quantity, min: 1, value: item.quantity, name: "cart_item[quantity]", style: "width: 60px;" %>
-                <%= f.submit "Update", class: "btn btn-sm btn-outline-secondary" %>
+                <div class="input-group">
+                  <%= f.number_field :quantity, min: 1, value: item.quantity, class: "form-control", style: "max-width: 80px;" %>
+                  <%= f.submit "Update", class: "btn btn-outline-secondary" %>
+                </div>
               <% end %>
             <% else %>
-              <%= number_field_tag "quantity", item.quantity, min: 1, disabled: true, style: "width: 60px;" %>
+              <%= number_field_tag "quantity", item.quantity, min: 1, disabled: true, class: "form-control" %>
             <% end %>
           </td>
           <td><%= number_to_currency(item.product.price) %></td>
@@ -43,5 +45,4 @@
   </table>
 
   <%= link_to "Proceed to Checkout", checkout_path, class: "btn btn-success" %>
-
 <% end %>

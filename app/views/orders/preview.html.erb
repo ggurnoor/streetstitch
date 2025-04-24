@@ -1,8 +1,9 @@
-<h1>🧾 Order Invoice Preview</h1>
+<h1>🧾 Invoice Preview</h1>
 
-<p><strong>Shipping Address:</strong><br>
-  <%= @invoice[:address] %><br>
-  <strong>Province:</strong> <%= @invoice[:province]&.name %>
+<p>
+  <strong>Shipping Address:</strong><br>
+  <%= @invoice.address %><br>
+  <strong>Province:</strong> <%= @invoice.province %>
 </p>
 
 <table class="table">
@@ -15,28 +16,27 @@
     </tr>
   </thead>
   <tbody>
-    <% @invoice[:items].each do |item| %>
+    <% @cart_items.each do |item| %>
       <tr>
         <td><%= item.product.name %></td>
         <td><%= item.quantity %></td>
         <td><%= number_to_currency(item.product.price) %></td>
-        <td><%= number_to_currency(item.product.price * item.quantity) %></td>
+        <td><%= number_to_currency(item.quantity * item.product.price) %></td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
+<p><strong>Subtotal:</strong> <%= number_to_currency(@invoice.subtotal) %></p>
+<p><strong>PST:</strong> <%= number_to_currency(@invoice.pst) %></p>
+<p><strong>GST:</strong> <%= number_to_currency(@invoice.gst) %></p>
+<p><strong>HST:</strong> <%= number_to_currency(@invoice.hst) %></p>
+<p><strong>Total:</strong> <%= number_to_currency(@invoice.total) %></p>
+
 <hr>
 
-<p><strong>Subtotal:</strong> <%= number_to_currency(@invoice[:subtotal]) %></p>
-<p><strong>PST:</strong> <%= number_to_currency(@invoice[:pst]) %></p>
-<p><strong>GST:</strong> <%= number_to_currency(@invoice[:gst]) %></p>
-<p><strong>HST:</strong> <%= number_to_currency(@invoice[:hst]) %></p>
-<p><strong>Total:</strong> <%= number_to_currency(@invoice[:total]) %></p>
-
-<%= form_with url: orders_path, method: :post do %>
-  <%= hidden_field_tag :address, @invoice[:address] %>
-  <%= hidden_field_tag :province_id, @invoice[:province]&.id %>
-  <%= submit_tag "Proceed to Payment", class: "btn btn-success" %>
+<%= form_with url: orders_path, method: :post, local: true do %>
+  <%= submit_tag "Place Order", class: "btn btn-success" %>
 <% end %>
 
+<%= link_to "Go Back", checkout_path, class: "btn btn-secondary" %>

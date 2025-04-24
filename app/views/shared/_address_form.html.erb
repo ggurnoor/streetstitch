@@ -1,0 +1,21 @@
+<h3>Shipping Address</h3>
+
+<div style="margin-bottom: 15px;">
+  <%= f.label :street, "Street Address" %><br>
+  <%= f.text_field :street, class: "form-control", required: true %>
+</div>
+
+<div style="margin-bottom: 15px;">
+  <%= f.label :city, "City" %><br>
+  <%= f.text_field :city, class: "form-control", required: true %>
+</div>
+
+<div style="margin-bottom: 15px;">
+  <%= f.label :postal_code, "Postal Code" %><br>
+  <%= f.text_field :postal_code, class: "form-control", required: true %>
+</div>
+
+<div style="margin-bottom: 20px;">
+  <%= f.label :province_id, "Province" %><br>
+  <%= f.collection_select :province_id, Province.all, :id, :name, {}, { class: "form-select", required: true } %>
+</div>

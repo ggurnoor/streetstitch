@@ -1,24 +1,29 @@
-<h1>Manage Categories</h1>
+<h1 style="font-size: 24px; margin-bottom: 20px;">Manage Categories</h1>
 
-<%= form_with model: @category, url: categories_path, local: true do |form| %>
-  <div>
-    <%= form.label :name, "New Category Name" %><br>
-    <%= form.text_field :name %>
-  </div>
-  <div>
-    <%= form.submit "Add Category", class: "btn btn-primary" %>
-  </div>
-<% end %>
+<div style="background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 600px;">
+  <%= form_with model: @category, url: categories_path, local: true do |form| %>
+    <div style="margin-bottom: 15px;">
+      <%= form.label :name, "New Category Name", style: "font-weight: bold;" %><br>
+      <%= form.text_field :name, style: "width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" %>
+    </div>
+    <div>
+      <%= form.submit "Add Category", class: "btn btn-primary", style: "padding: 6px 12px;" %>
+    </div>
+  <% end %>
+</div>
 
-<hr>
+<hr style="margin: 30px 0;">
 
-<h2>All Categories</h2>
-<ul>
+<h2 style="font-size: 20px;">All Categories</h2>
+
+<ul style="list-style: none; padding-left: 0;">
   <% @categories.each do |cat| %>
-    <li>
-      <%= cat.name %> –
-      <%= link_to "Edit", edit_category_path(cat) %> |
-      <%= button_to "Delete", category_path(cat), method: :delete, data: { confirm: "Are you sure?" } %>
+    <li style="margin-bottom: 12px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; background-color: #f8f9fa;">
+      <span style="font-weight: bold;"><%= cat.name %></span>
+      <div style="margin-top: 8px;">
+        <%= link_to "✏️ Edit", edit_category_path(cat), class: "btn btn-sm btn-warning", style: "margin-right: 8px;" %>
+        <%= button_to "🗑 Delete", category_path(cat), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+      </div>
     </li>
   <% end %>
 </ul>

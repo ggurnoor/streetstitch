@@ -1,0 +1,19 @@
+<div class="col">
+  <div class="card h-100">
+    <div class="card-body">
+      <h5 class="card-title"><%= link_to product.name, product_path(product) %></h5>
+      <p class="card-text"><%= truncate(product.description, length: 100) %></p>
+
+      <% if product.original_price.present? && product.price < product.original_price %>
+        <p class="text-danger">
+          <s><%= number_to_currency(product.original_price) %></s>
+          <strong><%= number_to_currency(product.price) %></strong>
+        </p>
+      <% else %>
+        <p><strong><%= number_to_currency(product.price) %></strong></p>
+      <% end %>
+
+      <%= link_to "View", product_path(product), class: "btn btn-sm btn-primary" %>
+    </div>
+  </div>
+</div>

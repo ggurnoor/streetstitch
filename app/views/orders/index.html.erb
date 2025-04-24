@@ -1,40 +1,46 @@
-<h1>🧾 My Past Orders</h1>
+<h1 class="mb-4">🧾 My Past Orders</h1>
 
 <% if @orders.any? %>
   <% @orders.each do |order| %>
-    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 15px;">
-      <p><strong>Order ID:</strong> <%= order.id %></p>
-      <p><strong>Address:</strong> <%= order.address %></p>
-      <p><strong>Province:</strong> <%= order.province.name %></p>
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Order #<%= order.id %> - <%= order.status.titleize %></h5>
+        <p><strong>Address:</strong> <%= order.address %></p>
+        <p><strong>Province:</strong> <%= order.province.name %></p>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Line Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% order.order_items.each do |item| %>
+        <table class="table table-bordered mt-3">
+          <thead>
             <tr>
-              <td><%= item.product.name %></td>
-              <td><%= item.quantity %></td>
-              <td><%= number_to_currency(item.price) %></td>
-              <td><%= number_to_currency(item.price * item.quantity) %></td>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Line Total</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% order.order_items.each do |item| %>
+              <tr>
+                <td><%= item.product.name %></td>
+                <td><%= item.quantity %></td>
+                <td><%= number_to_currency(item.price) %></td>
+                <td><%= number_to_currency(item.price * item.quantity) %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
 
-      <p><strong>Subtotal:</strong> <%= number_to_currency(order.subtotal) %></p>
-      <p><strong>GST:</strong> <%= number_to_currency(order.gst) %></p>
-      <p><strong>PST:</strong> <%= number_to_currency(order.pst) %></p>
-      <p><strong>HST:</strong> <%= number_to_currency(order.hst) %></p>
-      <p><strong>Total:</strong> <%= number_to_currency(order.total) %></p>
+        <p><strong>Subtotal:</strong> <%= number_to_currency(order.subtotal) %></p>
+        <p><strong>GST:</strong> <%= number_to_currency(order.gst) %></p>
+        <p><strong>PST:</strong> <%= number_to_currency(order.pst) %></p>
+        <p><strong>HST:</strong> <%= number_to_currency(order.hst) %></p>
+        <p><strong>Total:</strong> <%= number_to_currency(order.total) %></p>
+      </div>
     </div>
   <% end %>
+
+  <div class="text-center">
+    <%= paginate @orders %>
+  </div>
 <% else %>
-  <p>You have no past orders yet.</p>
+  <div class="alert alert-info">You have no past orders yet.</div>
 <% end %>

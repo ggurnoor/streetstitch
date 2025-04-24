@@ -24,10 +24,26 @@ Rails.application.routes.draw do
   resource :cart, only: [:show]
   resources :cart_items, only: [:create, :update, :destroy]
 
+  # ✅ Place the preview route BEFORE orders
+  post 'orders/preview', to: 'orders#preview', as: :preview_order
+
   # Orders
-  resources :orders, only: [:new, :create, :show, :index]
+  resources :orders, only: [:new, :create, :show, :index] do
+    post 'stripe_checkout', on: :member
+    collection do
+      post 'preview'
+    end
+    post 'stripe_checkout', on: :member
+
+  end
+
+
+  # Checkout shortcut
   get "/checkout", to: "orders#new", as: :checkout
-  get "/invoice", to: "orders#show", as: :invoice
+
+  # Stripe Payment Handling
+  post '/fake_payment_confirmation', to: 'payments#fake_confirm'
+  post '/webhooks/stripe/receive', to: 'webhooks/stripe#receive'
 
 
   # Health check & PWA

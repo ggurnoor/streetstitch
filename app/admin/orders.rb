@@ -1,6 +1,10 @@
 ActiveAdmin.register Order do
   includes :user, :order_items, :province
 
+  # ✅ Fix: Allow mass assignment of these fields
+  permit_params :user_id, :province_id, :subtotal, :gst, :pst, :hst, :total,
+                :address, :status, :stripe_payment_id, :stripe_session_id
+
   index do
     selectable_column
     id_column
@@ -30,6 +34,8 @@ ActiveAdmin.register Order do
       row("GST") { number_to_currency(order.gst) }
       row("HST") { number_to_currency(order.hst) }
       row("Total") { number_to_currency(order.total) }
+      row("Status") { status_tag(order.status) }
+      row("Stripe Payment ID") { order.stripe_payment_id }
     end
 
     panel "Ordered Products" do
@@ -40,5 +46,23 @@ ActiveAdmin.register Order do
         column("Line Total") { |item| number_to_currency(item.price * item.quantity) }
       end
     end
+  end
+
+  form do |f|
+    f.semantic_errors
+    f.inputs "Order Details" do
+      f.input :user
+      f.input :province
+      f.input :address
+      f.input :subtotal
+      f.input :pst
+      f.input :gst
+      f.input :hst
+      f.input :total
+      f.input :status, as: :select, collection: Order.statuses.keys
+      f.input :stripe_payment_id
+      f.input :stripe_session_id
+    end
+    f.actions
   end
 end

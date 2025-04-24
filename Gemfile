@@ -22,6 +22,8 @@ gem 'kaminari'
 gem 'activeadmin'
 gem 'sassc'
 gem 'dotenv-rails'
+gem 'stripe'
+
 
 
 # Use Redis adapter to run Action Cable in production
