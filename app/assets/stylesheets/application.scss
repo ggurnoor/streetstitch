@@ -1,11 +1,13 @@
 // Variables
 $bg-color: #f9fafb;
 $text-color: #333;
-$navbar-color: #1f2937;
+$navbar-color: #2c1a1b; // deep maroon background
 $primary-white: white;
-$notice-bg: #d1e7dd;
-$notice-color: #0f5132;
-$alert-bg: #f8d7da;
+$primary-maroon: #800000; // maroon for buttons
+$primary-maroon-hover: #a52a2a; // lighter maroon hover
+$notice-bg: #e0c4c4;
+$notice-color: #4c1a1a;
+$alert-bg: #f5d1d1;
 $alert-color: #842029;
 
 // Inheritance via mixin
@@ -76,4 +78,47 @@ body {
     @include flash-style($alert-bg, $alert-color);
   }
 }
+
+// Maroon Button Styling
+.btn-primary {
+  background-color: $primary-maroon;
+  border-color: $primary-maroon;
+  color: $primary-white;
+
+  &:hover {
+    background-color: $primary-maroon-hover;
+    border-color: $primary-maroon-hover;
+  }
+}
+
+.btn-outline-secondary {
+  border-color: $primary-maroon;
+  color: $primary-maroon;
+
+  &:hover {
+    background-color: $primary-maroon-hover;
+    color: $primary-white;
+  }
+}
+
+.btn-success {
+  background-color: #7b3e3e;
+  border-color: #7b3e3e;
+
+  &:hover {
+    background-color: #9f4d4d;
+    border-color: #9f4d4d;
+  }
+}
+
+.btn-danger {
+  background-color: #5c0000;
+  border-color: #5c0000;
+
+  &:hover {
+    background-color: #7a1f1f;
+    border-color: #7a1f1f;
+  }
+}
+
 // added flash
