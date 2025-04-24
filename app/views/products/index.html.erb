@@ -1,26 +1,26 @@
 <h1 class="mb-4">All Products</h1>
 
 <%= form_with url: products_path, method: :get, local: true, class: "row g-2 mb-4" do %>
-  <div class="col-md-6">
+  <div class="col-12 col-md-6">
     <%= text_field_tag :search, params[:search], placeholder: "Search products...", class: "form-control" %>
   </div>
-  <div class="col-md-3">
+  <div class="col-6 col-md-3">
     <%= select_tag :category_id,
         options_from_collection_for_select(@categories, :id, :name, params[:category_id]),
         include_blank: "All Categories", class: "form-select" %>
   </div>
-  <div class="col-md-2">
+  <div class="col-6 col-md-2">
     <%= select_tag :filter,
-        options_for_select([["All", ""], ["New Arrivals (Last 3 Days)", "new"], ["On Sale", "sale"]], params[:filter]),
+        options_for_select([["All", ""], ["New Arrivals", "new"], ["On Sale", "sale"]], params[:filter]),
         class: "form-select" %>
   </div>
-  <div class="col-md-1">
+  <div class="col-12 col-md-1">
     <%= submit_tag "Search", class: "btn btn-primary w-100" %>
   </div>
 <% end %>
 
 <% if @products.any? %>
-  <div class="row row-cols-1 row-cols-md-3 g-4">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
     <% @products.each do |product| %>
       <%= render partial: 'shared/product_card', locals: { product: product } %>
     <% end %>

@@ -4,45 +4,47 @@
 <% else %>
   <h1 class="mb-4">🛒 Your Cart</h1>
 
-  <table class="table table-bordered">
-    <thead class="table-dark">
-      <tr>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Unit Price</th>
-        <th>Line Total</th>
-        <% if user_signed_in? %>
-          <th>Actions</th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody>
-      <% @cart_items.each do |item| %>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead class="table-dark">
         <tr>
-          <td><%= item.product.name %></td>
-          <td>
-            <% if user_signed_in? %>
-              <%= form_with url: cart_item_path(item), method: :patch, local: true do |f| %>
-                <div class="input-group">
-                  <%= f.number_field :quantity, min: 1, value: item.quantity, class: "form-control", style: "max-width: 80px;" %>
-                  <%= f.submit "Update", class: "btn btn-outline-secondary" %>
-                </div>
-              <% end %>
-            <% else %>
-              <%= number_field_tag "quantity", item.quantity, min: 1, disabled: true, class: "form-control" %>
-            <% end %>
-          </td>
-          <td><%= number_to_currency(item.product.price) %></td>
-          <td><%= number_to_currency(item.product.price * item.quantity) %></td>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Unit Price</th>
+          <th>Line Total</th>
           <% if user_signed_in? %>
-            <td>
-              <%= button_to "Remove", cart_item_path(item), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
-            </td>
+            <th>Actions</th>
           <% end %>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% @cart_items.each do |item| %>
+          <tr>
+            <td><%= item.product.name %></td>
+            <td>
+              <% if user_signed_in? %>
+                <%= form_with url: cart_item_path(item), method: :patch, local: true do |f| %>
+                  <div class="input-group">
+                    <%= f.number_field :quantity, min: 1, value: item.quantity, class: "form-control", style: "max-width: 80px;" %>
+                    <%= f.submit "Update", class: "btn btn-outline-secondary" %>
+                  </div>
+                <% end %>
+              <% else %>
+                <%= number_field_tag "quantity", item.quantity, min: 1, disabled: true, class: "form-control" %>
+              <% end %>
+            </td>
+            <td><%= number_to_currency(item.product.price) %></td>
+            <td><%= number_to_currency(item.product.price * item.quantity) %></td>
+            <% if user_signed_in? %>
+              <td>
+                <%= button_to "Remove", cart_item_path(item), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-sm btn-danger" %>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 
-  <%= link_to "Proceed to Checkout", checkout_path, class: "btn btn-success" %>
+  <%= link_to "Proceed to Checkout", checkout_path, class: "btn btn-success mt-3" %>
 <% end %>

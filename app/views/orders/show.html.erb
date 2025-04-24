@@ -17,7 +17,62 @@
     <tr>
       <th>Product</th>
       <th>Quantity</th>
-      <th>Price</th>
+      <h1 class="mb-4">🧾 Order Invoice</h1>
+
+<% if flash[:notice] %>
+  <div class="alert alert-success"><%= flash[:notice] %></div>
+<% end %>
+
+<% if @order.address.present? %>
+  <p>
+    <strong>Shipping Address:</strong><br>
+    <%= @order.address %><br>
+    <strong>Province:</strong> <%= @order.province&.name %>
+  </p>
+<% end %>
+
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Line Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @order.order_items.each do |item| %>
+        <tr>
+          <td><%= item.product.name %></td>
+          <td><%= item.quantity %></td>
+          <td><%= number_to_currency(item.price) %></td>
+          <td><%= number_to_currency(item.price * item.quantity) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<p><strong>Subtotal:</strong> <%= number_to_currency(@order.subtotal) %></p>
+<p><strong>PST:</strong> <%= number_to_currency(@order.pst) %></p>
+<p><strong>GST:</strong> <%= number_to_currency(@order.gst) %></p>
+<p><strong>HST:</strong> <%= number_to_currency(@order.hst) %></p>
+<p><strong>Total:</strong> <%= number_to_currency(@order.total) %></p>
+
+<% if @order.paid? %>
+  <div class="alert alert-success mt-4">
+    ✅ Payment Received – This order has been marked as <strong>PAID</strong>.<br>
+    Stripe Payment ID: <code><%= @order.stripe_payment_id %></code>
+  </div>
+<% else %>
+  <%= form_with url: stripe_checkout_order_path(@order), method: :post do %>
+    <%= submit_tag "💳 Pay Now with Stripe", class: "btn btn-primary mt-3" %>
+  <% end %>
+<% end %>
+
+<%= link_to "Back to Home", root_path, class: "btn btn-secondary mt-3" %>
+
       <th>Line Total</th>
     </tr>
   </thead>

@@ -1,0 +1,78 @@
+// Variables
+$bg-color: #f9fafb;
+$text-color: #333;
+$navbar-color: #1f2937;
+$primary-white: white;
+$notice-bg: #d1e7dd;
+$notice-color: #0f5132;
+$alert-bg: #f8d7da;
+$alert-color: #842029;
+
+// Inheritance via mixin
+@mixin flash-style($bg, $color) {
+  background: $bg;
+  color: $color;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+// Main styles
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: $bg-color;
+  color: $text-color;
+}
+
+.main-container {
+  padding: 20px;
+}
+
+.navbar {
+  background-color: $navbar-color;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $primary-white;
+
+  .nav-link {
+    color: $primary-white;
+    margin-left: 20px;
+    text-decoration: none;
+  }
+
+  .brand {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .nav-user {
+    margin-right: 15px;
+  }
+
+  .inline-form {
+    display: inline;
+  }
+
+  .logout-btn {
+    background: none;
+    border: none;
+    color: $primary-white;
+    cursor: pointer;
+    padding: 0;
+    font: inherit;
+  }
+}
+
+// Flash messages
+.flash {
+  &.notice {
+    @include flash-style($notice-bg, $notice-color);
+  }
+
+  &.alert {
+    @include flash-style($alert-bg, $alert-color);
+  }
+}

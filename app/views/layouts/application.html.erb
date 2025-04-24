@@ -19,7 +19,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav me-auto">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item"><%= link_to "All Products", products_path, class: "nav-link" %></li>
           <li class="nav-item"><%= link_to "About", about_path, class: "nav-link" %></li>
           <li class="nav-item"><%= link_to "Contact", contact_path, class: "nav-link" %></li>
@@ -41,7 +41,6 @@
     </div>
   </nav>
 
-  ...
   <div class="container mt-4">
     <% if flash[:notice] %>
       <div class="alert alert-success"><%= flash[:notice] %></div>
@@ -53,9 +52,8 @@
     <%= yield %>
   </div>
 
-  <!-- ✅ Add Bootstrap JS and Popper.js here -->
+  <!-- ✅ Required for Bootstrap components like navbar toggle -->
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 </body>
-
 </html>
