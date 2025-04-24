@@ -7,3 +7,4 @@ class AdminUser < ApplicationRecord
     %w[id email created_at updated_at current_sign_in_at sign_in_count]
   end
 end
+#added relationships
